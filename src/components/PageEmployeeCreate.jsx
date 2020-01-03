@@ -1,5 +1,8 @@
 import React from 'react'
+import { withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
+
+import { employeeAdd } from '../redux/actions'
 
 class PageEmployeeCreate extends React.Component {
   constructor(props) {
@@ -66,6 +69,7 @@ class PageEmployeeCreate extends React.Component {
       if(res.status !== 201) {
         this.setState({ isSaving: false, error: `Saving returned status ${res.status}`})
       } else {
+        this.props.employeeAdd(employee);
         this.props.history.push("/");
       }
     })  
@@ -95,5 +99,11 @@ class PageEmployeeCreate extends React.Component {
   }
 }
 
-export default connect(
-)(PageEmployeeCreate)
+const mapDispatchToProps = (dispatch) => ({
+  employeeAdd: employee => dispatch(employeeAdd(employee))
+})
+
+export default withRouter(connect(
+  null,
+  mapDispatchToProps
+)(PageEmployeeCreate))
